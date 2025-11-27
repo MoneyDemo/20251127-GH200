@@ -8,6 +8,9 @@ x86/
 [Ll]og/
 [Ll]ogs/
 
+# Test Results
+TestResults/
+
 # User-specific files
 *.rsuser
 *.suo

@@ -2,7 +2,7 @@ using TodoApp.Models;
 
 namespace TodoApp.Services;
 
-public class TodoService
+public class TodoService : ITodoService
 {
     private static readonly List<TodoItem> _todos = new()
     {
