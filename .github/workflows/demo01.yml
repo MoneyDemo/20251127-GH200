@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 env:
-  buildConfig: '${{ vars.buildConfig }}'
-  
+  buildConfig: '${{ secrets.buildConfig }}'
+
 jobs:
   build:
     name: Build Job
