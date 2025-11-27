@@ -6,10 +6,15 @@ on:
       - '*'
   workflow_dispatch:
 
+env:
+  buildConfig: 'Release'
+    
 jobs:
   build:
     name: Build Job
     runs-on: ubuntu-latest
+    env:
+      buildConfig: 'Debug'
     steps:
       - uses: actions/checkout@v4
 
@@ -17,10 +22,10 @@ jobs:
         run: dotnet restore TodoApp/*.csproj
 
       - name: Build
-        run: dotnet build TodoApp/*.csproj --configuration Release --no-restore
+        run: dotnet build TodoApp/*.csproj --configuration ${{ env.buildConfig }} --no-restore
 
       - name: Publish
-        run: dotnet publish TodoApp/TodoApp.csproj --configuration Release --no-build  --output ${{ github.workspace }}/publish
+        run: dotnet publish TodoApp/TodoApp.csproj --configuration ${{ env.buildConfig }} --no-build  --output ${{ github.workspace }}/publish
       
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -37,6 +42,12 @@ jobs:
         with:
           name: drop
           path: ${{ github.workspace }}/publish
+
+      # - uses: azure/webapps-deploy@v3
+      #   with:
+      #     app-name: 'demo1127web'
+      #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+      #     package: ${{ github.workspace }}/publish
       - run: | 
           echo "Deploying the application1..."
           echo "Deployment1 complete."
