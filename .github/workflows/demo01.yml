@@ -42,11 +42,11 @@ jobs:
           name: drop
           path: ${{ github.workspace }}/publish
 
-      # - uses: azure/webapps-deploy@v3
-      #   with:
-      #     app-name: 'demo1127web'
-      #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-      #     package: ${{ github.workspace }}/publish
+      - uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'demo1127web'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ github.workspace }}/publish
       - run: | 
           echo "Deploying the application1..."
           echo "Deployment1 complete."
