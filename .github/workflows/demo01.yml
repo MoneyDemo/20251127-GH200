@@ -7,14 +7,13 @@ on:
   workflow_dispatch:
 
 env:
-  buildConfig: 'Release'
-    
+  buildConfig: '${{ vars.buildConfig }}'
+  
 jobs:
   build:
     name: Build Job
     runs-on: ubuntu-latest
-    env:
-      buildConfig: 'Debug'
+
     steps:
       - uses: actions/checkout@v4
 
