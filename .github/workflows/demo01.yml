@@ -9,12 +9,16 @@ on:
 jobs:
   build:
     name: Build Job
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
-      - run: | 
-          echo "This is a demo workflow running on push, pull request, schedule, or manual trigger."
-          echo "This is a demo workflow running on push, pull request, schedule, or manual trigger 2."
-          exit 0
+      - uses: actions/checkout@v4
+
+      - name: Restore
+        run: dotnet restore TodoApp/*.csproj
+
+      - name: Build
+        run: dotnet build TodoApp/*.csproj --configuration Release --no-restore
+
   deploy1:
     name: Deploy Job
     runs-on: ubuntu-24.04
