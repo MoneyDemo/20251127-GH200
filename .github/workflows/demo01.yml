@@ -14,10 +14,29 @@ jobs:
       - run: | 
           echo "This is a demo workflow running on push, pull request, schedule, or manual trigger."
           echo "This is a demo workflow running on push, pull request, schedule, or manual trigger 2."
-  deploy:
+  deploy1:
     name: Deploy Job
     runs-on: ubuntu-24.04
+    needs: build
     steps:
       - run: | 
-          echo "Deploying the application..."
-          echo "Deployment complete."
+          echo "Deploying the application1..."
+          echo "Deployment1 complete."
+
+  deploy2:
+    name: Deploy Job 2
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - run: | 
+          echo "Deploying the application2..."
+          echo "Deployment2 complete."
+
+  post-deploy:
+    name: Post-Deploy Job
+    runs-on: ubuntu-24.04
+    needs: [deploy1, deploy2]
+    steps:
+      - run: | 
+          echo "Running post-deployment tasks..."
+          echo "Post-deployment tasks complete."
