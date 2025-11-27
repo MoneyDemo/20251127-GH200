@@ -1,0 +1,47 @@
+name: Demo02 Flow
+
+on: 
+  push: 
+    branches: 
+      - '*'
+  workflow_dispatch:
+
+env:
+  buildConfig: '${{ secrets.buildConfig }}'
+
+jobs:
+  build:
+    name: Build Job
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore
+        run: dotnet restore TodoApp/*.csproj
+
+      - name: Build
+        run: dotnet build TodoApp/*.csproj --configuration ${{ env.buildConfig }} --no-restore
+      
+      - name: UnitTest
+        run: dotnet test TodoApp.Tests/*.csproj --configuration ${{ env.buildConfig }} --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ${{ github.workspace }}/test-results
+
+      - name: SonarScanner for .NET 10 with pull request decoration support
+        uses: highbyte/sonarscan-dotnet@v2.5.0
+        with:
+          # The key of the SonarQube project
+          sonarProjectKey: mttdemo_demo1127
+          # The name of the SonarQube project
+          sonarProjectName:  Demo1127
+          # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
+          sonarOrganization: mttdemo
+          # Optional command arguments to dotnet build
+          dotnetBuildArguments: ./TodoApp
+          # Optional command arguments to dotnet test
+          dotnetTestArguments: ./TodoApp.Tests --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          # Optional extra command arguments the the SonarScanner 'begin' command
+          sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
