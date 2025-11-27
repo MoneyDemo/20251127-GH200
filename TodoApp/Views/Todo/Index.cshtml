@@ -1,0 +1,84 @@
+@model IEnumerable<TodoApp.Models.TodoItem>
+
+@{
+    ViewData["Title"] = "TODO List";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📝 TODO List</h1>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Add New TODO
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">No TODOs yet!</h4>
+        <p>Click the "Add New TODO" button to create your first task.</p>
+    </div>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col">
+            <span class="badge bg-secondary">Total: @Model.Count()</span>
+            <span class="badge bg-success">Completed: @Model.Count(t => t.IsCompleted)</span>
+            <span class="badge bg-warning text-dark">Pending: @Model.Count(t => !t.IsCompleted)</span>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 50px;">Status</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Created At</th>
+                    <th style="width: 200px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="@(item.IsCompleted ? "table-success" : "")">
+                        <td class="text-center">
+                            <form asp-action="ToggleComplete" asp-route-id="@item.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm @(item.IsCompleted ? "btn-success" : "btn-outline-secondary")" title="@(item.IsCompleted ? "Mark as incomplete" : "Mark as complete")">
+                                    @if (item.IsCompleted)
+                                    {
+                                        <span>✓</span>
+                                    }
+                                    else
+                                    {
+                                        <span>○</span>
+                                    }
+                                </button>
+                            </form>
+                        </td>
+                        <td class="@(item.IsCompleted ? "text-decoration-line-through text-muted" : "")">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                                @item.Title
+                            </a>
+                        </td>
+                        <td class="@(item.IsCompleted ? "text-decoration-line-through text-muted" : "")">
+                            @(item.Description?.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)
+                        </td>
+                        <td>
+                            <small class="text-muted">@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="View Details">👁</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Edit">✏️</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Delete">🗑️</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
