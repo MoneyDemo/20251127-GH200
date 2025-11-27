@@ -1,9 +1,6 @@
 name: Demo Flow
 
 on: 
-  push: 
-    branches: 
-      - '*'
   workflow_dispatch:
 
 env:

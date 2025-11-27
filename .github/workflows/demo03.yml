@@ -1,0 +1,24 @@
+name: Demo02 Flow
+
+on: 
+  push: 
+    branches: 
+      - '*'
+  workflow_dispatch:
+
+env:
+  buildConfig: '${{ secrets.buildConfig }}'
+
+jobs:
+  build:
+    name: Build Job
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Use Demo Action
+        uses: ./.github/actions/demo-action
+        with:
+          path: TodoApp
+          test-path: TodoApp.Tests
