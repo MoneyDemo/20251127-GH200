@@ -1,0 +1,32 @@
+name: "Demo Action"
+description: "One stop for dotnet build and test."
+inputs:
+  path:
+    description: "Path to the project file."
+    required: true
+  test-path:
+    description: "Path to the test project file."
+    required: true
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+runs:
+  using: "composite"
+  steps:
+    - name: Random Number Generator
+      id: random-number-generator
+      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Restore
+      shell: bash
+      run: dotnet restore ${{ inputs.path }}/*.csproj
+
+    - name: Build
+      shell: bash
+      run: dotnet build ${{ inputs.path }}/*.csproj --configuration ${{ env.buildConfig }} --no-restore
+
+    - name: UnitTest
+      shell: bash
+      run: dotnet test ${{ inputs.path }}/*.csproj --configuration ${{ env.buildConfig }} --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ${{ github.workspace }}/test-results
