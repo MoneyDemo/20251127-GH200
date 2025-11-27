@@ -1,0 +1,16 @@
+name: Demo Flow
+
+on: 
+  push: 
+    branches: 
+      - main
+      - dev
+      - 'release/**'
+    paths:
+      - 'src/**'
+    tags:
+      - '*'
+  pull_request:
+    branches: 
+      - main
+      - dev
