@@ -14,3 +14,16 @@ on:
     branches: 
       - main
       - dev
+  
+  schedule:
+    - cron: '* * * * *'  # Runs every 30 minutes
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: | 
+          echo "This is a demo workflow running on push, pull request, schedule, or manual trigger."
