@@ -3,27 +3,21 @@ name: Demo Flow
 on: 
   push: 
     branches: 
-      - main
-      - dev
-      - 'release/**'
-    paths:
-      - 'src/**'
-    tags:
       - '*'
-  pull_request:
-    branches: 
-      - main
-      - dev
-  
-  schedule:
-    - cron: '* * * * *'  # Runs every 30 minutes
-
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    name: Build Job
+    runs-on: ubuntu-24.04
     steps:
       - run: | 
           echo "This is a demo workflow running on push, pull request, schedule, or manual trigger."
+          echo "This is a demo workflow running on push, pull request, schedule, or manual trigger 2."
+  deploy:
+    name: Deploy Job
+    runs-on: ubuntu-24.04
+    steps:
+      - run: | 
+          echo "Deploying the application..."
+          echo "Deployment complete."
