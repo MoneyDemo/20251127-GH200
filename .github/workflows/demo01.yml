@@ -20,7 +20,7 @@ jobs:
         run: dotnet build TodoApp/*.csproj --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish TodoApp/*.csproj --configuration Release --no-build --output --output ${{ github.workspace }}/publish
+        run: dotnet publish TodoApp/TodoApp.csproj --configuration Release --no-build  --output ${{ github.workspace }}/publish
       
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
