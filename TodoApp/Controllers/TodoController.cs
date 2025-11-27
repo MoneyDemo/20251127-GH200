@@ -6,9 +6,9 @@ namespace TodoApp.Controllers;
 
 public class TodoController : Controller
 {
-    private readonly TodoService _todoService;
+    private readonly ITodoService _todoService;
 
-    public TodoController(TodoService todoService)
+    public TodoController(ITodoService todoService)
     {
         _todoService = todoService;
     }
